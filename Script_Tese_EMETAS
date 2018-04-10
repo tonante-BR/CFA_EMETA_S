@@ -1,0 +1,47 @@
+##CFA
+### criação do modelo de três fatores
+tres.fatores = '
+f1 =~ v10 + v17 + v19 + v22 + v31 + v34 + v35 + v38 + v42 + v45 + v48 + v49 + v50
++ v51 + v53 + v55 + v58 + v59 + v61 + v62 + v65 + v66 + v67 + v68 + v73 + v74
+f2 =~ v1 + v2 + v3 + v4 + v5 + v6 + v8 + v9 + v11 + v12 + v13 + v16 + v21 + v63 +
+v72
+f3 =~ v15 + v20 + v23 + v24 + v26 + v28 + v29 + v30 + v33 + v37 + v39 + v43 + v47
+'
+### criação do modelo de fator único
+funico <- 'meta =~ v10 + v17 + v19 + v22 + v31 + v34 + v35 + v38 + v42 + v45 + v48
++ v49 + v50 + v51 + v53 + v55 + v58 + v59 + v61 + v62 + v65 + v66 + v67 + v68 +
+v73 + v74 + v1 + v2 + v3 + v4 + v5 + v6 + v8 + v9 + v11 + v12 + v13 + v16 + v21 +
+v63 + v72 + v15 + v20 + v23 + v24 + v26 + v28 + v29 + v30 + v33 + v37 + v39 + v43
++ v47'
+##Executar os modelos
+tres.ajustadoWLSMV = cfa(tres.fatores, data = data.54itens, estimator = "WLSMV")
+fatorunicoWLSMV = cfa(funico, data = data.54itens, estimator = "WLSMV")
+##Sumário
+summary(tres.ajustadoWLSMV, standardized = TRUE, rsquare = TRUE)
+summary(fatorunicoWLSMV, fit.measures = "T", standardized = TRUE, rsquare =
+TRUE)
+##Índices de adequação
+fitMeasures(tres.ajustadoWLSMV)
+fitMeasures(fatorunicoWLSMV)
+##Criação das figuras AFC
+library(semPlot)
+png("FIGURE1.png", width=15, height=15, units="in", res=500)
+semPaths(tres.ajustado, title=FALSE, label.cex =
+0.5,sizeLat=5,sizeMan=3,edge.label.cex=0.65, minimum = 0.0001, sizeInt = 0.5,
+mar=c(1,1,1,1), residuals = FALSE, intercepts = FALSE, thresholds = FALSE, layout =
+"circle2", "std", groups = "lat")
+dev.off()
+fatorunico <- cfa(funico, data = dados, estimator = "WLSMV")
+fit.fatorunico <- summary(fatorunico, fit.measures = TRUE)
+png("FIGURE2.png", width=15, height=15, units="in", res=500)
+semPaths(fatorunico, title=FALSE, label.cex =
+0.5,sizeLat=5,sizeMan=3,edge.label.cex=0.65, minimum = 0.0001, sizeInt = 0.5,
+mar=c(1,1,1,1), residuals = FALSE, intercepts = FALSE, thresholds = FALSE, layout =
+"circle", "std", groups = "lat")
+dev.off()
+## Confiabilidade/Precisão da EMETA-S (Fator Único)
+182
+alpha(data.54itens[ , c(1, 2, 3, 5, 7, 8, 9, 12, 14, 15, 16, 18, 19, 22, 28, 29, 30, 31, 33,
+34, 35, 36, 37, 38, 39, 42, 45, 46, 47, 48, 49, 50, 51, 54)])
+##Correlação: Validade convergente Escore x MEEM
+cor.test(DataCorr34itens$Score, DataCorr34itens$MEEM)
